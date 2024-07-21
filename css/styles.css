@@ -1,0 +1,164 @@
+
+
+/*
+html { height:100%; }
+	
+body {
+	height: 100%;
+	width: 100%;
+	line-height: normal;
+	
+}*/
+html, body {
+	margin: 0; 
+	height: 99%; 
+	overflow: hidden
+}
+
+
+#title {
+	font-size: 20px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#title label {
+	font-size:12px;
+	margin-top:10px;
+}
+
+footer {
+	color: lightgray;
+}
+
+div.filetable {
+	width: 100%
+}	
+
+#pwoutput, #sunoutput, #erroutput, #contoutput {
+	/*font-family: var(--sun-font);*/ 
+	height: 75%;
+	overflow-y: scroll;
+	scroll-behavior: smooth;
+}
+
+table.xreftable {
+	 border-width: 1px;
+	 border-spacing: 0;
+	 border-style: outset;
+	 border-color: black;
+	 border-collapse: separate; 
+	 background-color: white; 
+	 font-size: 14px;
+	 table-layout: fixed;
+	 margin-bottom: 5px;
+	 width: 100%; 
+	 empty-cells: show;
+}
+
+	/* table header to not scroll */
+.xreftable th {
+	position:sticky;
+	top:0;
+	z-index:1;
+	border-style: inset;
+	border-color: lightblue;
+	border-width: 2px;
+	font-size: 14px;
+	background: #d6eaf8;
+}
+
+.xreftable tr {
+	vertical-align: middle;
+	padding-top: 5px;
+}
+
+.xreftable tr.uerror {
+	color: black;
+	background-color: #FF4500;
+	padding-top: 2px;
+	padding-botom: 2px;
+	background-clip: content-box; 
+	box-shadow: inset 0 0 0 5px lightgray;
+}
+
+.xreftable td { /*  , .xreftable th {*/
+	border-width: 1px;
+	padding: 1px;
+	border-style: inset;
+	border-color: lightblue;
+	font-size: 14px;
+	word-wrap: break-word;
+	min-width: 25px;
+}
+/* var tblClass = ["rowIndex", "fontIcon", "uniCol", "nameCol","mfCol", "sheetCol"]; */
+.xreftable th.rowIndex {
+	text-align: center;
+	color: gray;
+	width: 35px;
+}
+
+.xreftable td.fontIcon {
+	font-size: 32px;
+	font-family: var(--sun-font);
+	vertical-align: middle;
+	color: blue;
+	width: 45px;
+	height: 100%;
+}
+.xreftable th.fontIcon {
+	text-align: center;
+	color: blue;
+	width: 45px;
+}
+
+.xreftable td.uniCol {
+	text-align: center;
+	font-size: 14px;
+	font-family: var(--sun-font);
+	color: green;
+	width: 60px;
+}
+.xreftable th.uniCol {
+	text-align: center;
+	color: green;
+	width: 60px;
+}
+
+.xreftable th.nameCol {
+	text-align: center;
+	width: 100px;
+}
+
+.xreftable th.mfCol {
+	text-align: center;
+	width: 200px;
+}
+
+.xreftable td.mfCol {
+	text-align: left;
+	vertical-align: middle;
+	span {
+		padding: 1px 8px;
+	}
+}
+
+.xxerror {
+	color: black;
+	background: #ff8888;
+	padding-top:10px;
+	padding-top:10px;
+	margin-bottom:10px;
+	
+}
+/*
+.diagonal-stripes {
+    background: repeating-linear-gradient(
+		45deg,
+		#ff8888 0px,
+		#ff8888 20px,
+		#ffcccc 20px,
+		#ffcccc 40px
+	);
+}
+*/

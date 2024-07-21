@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- https://redstapler.co/sheetjs-tutorial-convert-excel-html-table/
+	https://docs.sheetjs.com/docs/api/utilities/
+	https://awik.io/dynamically-load-apply-fonts-javascript/
+	table sort 	https://github.com/oleksavyshnivsky/tablesort
+-->
+<html>
+<head>
+
+</head>
+<body>
+<a onclick="window.open(document.URL, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');">
+  Share Page
+</a>
+	
+<script language="JavaScript">
+	//window.open('index.html', '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+	//window.open('index.html', '_blank') //, 'location=yes,height=570,width=520,scrollbars=yes,status=yes');	
+
+function Full_W_P(url) {
+ params  = 'width='+screen.width;
+ params += ', height='+screen.height;
+ params += ', top=0, left=0'
+ params += ', fullscreen=yes';
+ params += ', directories=no';
+ params += ', location=no';
+ params += ', menubar=no';
+ params += ', resizable=yes';
+ params += ', scrollbars=no';
+ params += ', status=no';
+ params += ', toolbar=no';
+
+
+ newwin=window.open('index.html','FullWindowAll', params);
+ if (window.focus) {newwin.focus()}
+ return false;
+}
+Full_W_P('index.html');
+
+
+
+</script>
+</body>
+</html>

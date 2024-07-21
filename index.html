@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<!-- https://redstapler.co/sheetjs-tutorial-convert-excel-html-table/
+	https://docs.sheetjs.com/docs/api/utilities/
+	https://awik.io/dynamically-load-apply-fonts-javascript/
+	table sort 	https://github.com/oleksavyshnivsky/tablesort
+-->
+<html>
+<head>
+	
+	<meta http-equiv='cache-control' content='no-cache'> 
+	<meta http-equiv='expires' content='0'> 
+	<meta http-equiv='pragma' content='no-cache'>
+	<!--<script src="js/jquery-3.7.1.js"></script>-->
+
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<link rel="stylesheet" type="text/css" href="css/tabs.css">
+	<link rel="stylesheet" href="css/draggable-resizable-dialog.css" />
+	<link rel="stylesheet" type="text/css" href="css/tablesort.css">
+	<link rel="stylesheet" type="text/css" href="css/modal.css">
+	<script lang="javascript" src="js/xlsx.bundle.js"></script>
+	
+	<style>
+	/* =========    dragable dialogbox   ========== */
+	.dialog {
+		z-index: 99999; /* Sit on top */
+		color: #fff;
+		background: lightgray;
+	}
+	
+	.dialog .titlebar {
+		color: #fff;
+		background: red;
+	}
+	
+	.dialog>button {
+		background: #ff9999;
+	}
+	
+	/*============ grid style for table look ============ */
+	.grid-container {
+		display: grid;
+		/*grid-template-columns: 1fr 1fr;*/
+		grid-template-columns: auto 130px;
+		grid-gap: 5px;
+		border: 1px solid blue;
+		padding-left:15px;
+		background-color: #f2f4f4;);
+	}		
+	</style>
+
+</head>
+<body>
+
+	<div>
+		<!--<div class="alert alert-info" hidden>
+			Mode: <a href="?" id="span-for">FOR</a> | <a href="?foreach=true" id="span-foreach">FOREACH</a> (used in this test only)<br>
+			Duration of last sorting: <code id="last-duration">—</code><br>
+			Average duration: <code id="average-duration">—</code> (<code id="sortings">0</code> sortings).
+		</div>
+		-->
+		<center style="color:blue;"><b>XREF Search(Made From)</b></center>
+		<hr>
+		
+		<div class="grid-container" style="border: 1px solid blue; background:lightblue;">
+			<div class="grid-child">   <!-- style="border: 1px solid blue; background:lightblue;">-->
+				<div style="margin-bottom:0.5em;">
+					<label style="float: left; padding-left:5px;" for="xlfile"></label>
+					<input id="xlf"  type="file" name="xlfile" style="width:80px; overflow:hidden; float: left">
+					<label id="droptext" style="color:blue; margin-bottom:0px;" > 
+					Either browse or drop a document file(.xlsx) and font file (.woff/ttf) and primary list file (.csv) anywhere on page.
+					</label>
+				<!--					<label  for="cbutf8" style="float: right; padding-right:5px;" >UTF-8</label>
+				<input style="float: right; padding-right:5px;" type="checkbox" id="cbutf8" name="cbutf8" checked>-->
+				</div>
+				
+				<div style="float:left;">
+					 <b>Search Type&nbsp</b>
+						<span id="radiospan" style="border:1px; border-style:solid; padding-bottom:3px;">
+							<input type="radio" id="wordsrch" name="wsrch" value="word" onClick="setSrch(true)" checked>
+							<label for="wordsrch">Word</label>
+							<input type="radio" id="charsrch" name="wsrch" value="char" onClick="setSrch(false)">
+							<label for="charsrch">Char&nbsp</label>
+						</span>
+		
+					<label for="xsearch;" span style="float:left;"> &nbsp;&nbsp;&nbsp;&nbsp;<strong>Search Words &nbsp</strong></label>
+						<input id='xsearch' onkeyup='search_Table("xref1")' type='text' size="40">
+					<button type="submit"  onclick='clearSearch()'<img> Clear</button>	
+
+					<p style=" margin-bottom:0.5em; float:left; padding-left:0px;">In the <b>Search</b> bar, enter words separated by space. Select <b>Word</b> in Search Type for full word search.  Select <b>Char</b> in Search Type for partial word search.</p>
+				</div>
+			</div>
+			<div class="grid-child">  <!-- green" style="background:lightblue;">-->
+				
+				<a style="float:left; padding-left:5px;" href='javascript:popHelp()'>Help</a><br>
+				<a style="float:left; padding-left:5px;" href="javascript:window.location.reload(true)">Reload</a>
+				<br>
+				<label  for="cbutf8" style="float: left; padding-left:5px;" >CSV UTF-8</label>
+					<input  type="checkbox" id="cbutf8" name="cbutf8" checked>
+				<br><br>
+				<div id="showerr">
+					<label  for="cbshowerr" style="float: left; padding-left:5px;" >ShowErrors</label>
+						<input  type="checkbox" id="cbshowerr" name="cbshowerr" onclick="showErrors()" unchecked>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	<!-- tabbed content -->
+	<div class="tab">
+		<button class="tablinks" onclick="openTab(event, 'sunoutput')" id="sunOpen">SUN Dictionary</button>
+		<button class="tablinks" onclick="openTab(event, 'pwoutput')" id="pwOpen">Primary Words</button>
+		<button class="tablinks" onclick="openTab(event, 'erroutput')" id="errOpen">Error List</button>
+		<button class="tablinks" onclick="openTab(event, 'contoutput')" id="contOpen">Containment List</button>
+	</div>
+	<div id="drop-zone"></div>
+	<!-- tabbed content -->
+	
+	<div id="sunoutput"  class="tabcontent"></div>
+	<div id="pwoutput"   class="tabcontent"></div>
+	<div id="erroutput"  class="tabcontent"></div>
+	<div id="contoutput" class="tabcontent"></div>
+
+	<footer>
+		<center>
+			<!--<font face="SUN7.24"> -->
+		  <p id="copyright">&copy; Wilbur Zirk 2024 &#xebfa;
+		  </p>
+		 <!-- </font> -->
+		</center>
+	</footer>
+
+<!-- ===================   dragable dialogbox   --->
+	<div id="dialog" class="dialog" style="min-width:500px; min-height:280px;">
+		<div class="titlebar">Duplicate/Compare Error</div>
+		<button name="close"><!-- enter symbol here like &times; or &#x1f6c8; or use the default X if empty --></button>
+		<div id = "modalcontent" class="content">
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		</div>
+		<div class="buttonpane">
+			<div class="buttonset">
+				<button name="ok">OK</button>
+				<button name="cancel">Cancel</button>
+			</div>
+		</div>
+	</div>
+
+	<script src="js/modal.js"></script>
+	<script type="text/javascript" src="js/draggable-resizable-dialog.js"></script>
+	<script src="js/tablesearch.js"></script>
+	<script src="js/table-mf.js"></script>
+	<script src="js/tablesort.min.js"></script>
+
+	<script>
+		function popHelp(){
+			const win = window.open("help.html",
+				"win",
+				`width=800,height=400,screenX=200,screenY=200`
+		);
+		
+		
+		}
+		// for tablesort
+		document.querySelectorAll('.table-sortable').forEach(el => el.tsortable())
+		
+
+		var _CSV = false;
+		var errList = [];		// unicode1, unicode2, made_from
+		var contList = [];		// made from list
+		var pwList = [];		// primary word list
+		var sunList = [];		// dictionary file
+		var fname = "";
+		var searchId = "sunSearch";
+		/*
+		window.addEventListener('DOMContentLoaded', (event) => {
+			console.log('DOM fully loaded')
+			ele = document.getElementById("droptext");
+			var fnt = getComputedStyle(ele).fontFamily
+				  .split(', ')
+				  .find(font => document.fonts.check(`10px ${font}`));
+				  console.log('font family',fnt);
+		});
+		*/
+		// ============ tab content ===========================
+		function openTab(evt, tableName) {
+			function sendClick() {
+				var mevt = new MouseEvent("click", {
+					view: window, bubbles:true, cancelable:true, clientX: 20,
+				}),
+				ele = document.getElementById("xlf");
+				ele.dispatchEvent(mevt);
+				console.log('sendclick',mevt)
+			}
+		
+			function disableShowError(state) {
+				var nodes = document.getElementById("showerr").getElementsByTagName('*');
+				for(var i = 0; i < nodes.length; i++){
+					 nodes[i].disabled = state;
+				}
+			}
+		
+		
+		
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablinks");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+				tablinks[i].className = tablinks[i].className.replace(" loaded", "");
+			}
+	if (pwList.length == 0) document.getElementById("pwOpen").className.replace(/ loaded/g, "");
+	if (sunList.length == 0) document.getElementById("sunOpen").className.replace(" loaded", "");
+	if (errList.length == 0) document.getElementById("errOpen").className.replace(" loaded", "");
+	if (contList.length == 0) document.getElementById("contOpen").className.replace(" loaded", "");
+	
+
+			disableShowError(true)
+		  
+			if (tableName === "sunoutput") { 
+				if (sunList.length > 0) {
+					//sunTable(sunList);
+					searchId = "sunSearch";
+					sunTable(sunList);
+					search_Table();
+					disableShowError(false)
+					if (document.getElementById("cbshowerr").checked == true) showErrors();
+				} else { 
+					alert('Load The Primary Word and Dictionary lists first');
+					sendClick();
+				}
+			}
+			
+			if (tableName === "pwoutput") {
+				if (pwList.length > 0) {
+					//pwTable(pwList);
+					searchId = "pwSearch";
+					search_Table();
+				} else { 
+					alert('Load The Primary Word and Dictionary lists first');
+					sendClick();
+				}
+			}
+		  
+			if (tableName === "erroutput") {
+				searchId = "errSearch";
+				search_Table();
+			}
+			
+			if (tableName === "contoutput") {
+				searchId = "contSearch";
+				search_Table();
+			}
+			
+		  document.getElementById(tableName).style.display = "block";
+		  evt.currentTarget.className += " active";
+		  console.log('tableName', tableName);
+		  
+		  if (pwList.length > 0) document.getElementById("pwOpen").className += " loaded";
+		  if (sunList.length > 0) document.getElementById("sunOpen").className += " loaded";
+		  if (errList.length > 0) document.getElementById("errOpen").className += " loaded";
+		  if (contList.length > 0) document.getElementById("contOpen").className += " loaded";
+		  
+		}
+
+		// ============ end tab content =======================
+
+		var process_wb = (function() {
+			var to_json = function to_json(workbook) {
+				var t0 = performance.now();
+				var result = {};
+				var cnt = 0;
+				
+				workbook.SheetNames.forEach(function(sheetName) {
+					//if (sheetName == 'CLOTHING,NEEDLE,ROAD') {
+					if (sheetName != 'Table_of_Contents') {
+					//if (sheetName == 'PERSON_MOVE') {
+						var arr = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header:1, raw:true});
+						if(arr.length){
+							result[sheetName] = arr;
+						}
+						cnt += 1;
+					}
+				});
+				var t1 = performance.now();
+				console.log("to_json " + (t1 - t0) + " milliseconds.");
+				return result;
+			};
+
+			return function process_wb(wb) {
+				var t0 = performance.now();
+				console.log('process_wb')
+				clearSearch();
+				//clearTable();
+				global_wb = wb;
+				var output = "";
+				darr = to_json(wb);
+				
+				var t1 = performance.now();
+				console.log("process_wb "+ (t1 - t0) + " milliseconds.");
+
+				if (wb.SheetNames.length == 1 && wb.SheetNames[0] != "Table_of_Contents") {  // && _CSV) {
+					displayFileNames(fname, 'primary')
+					pwList = darr[wb.SheetNames[0]]
+					pwTable(pwList);
+					document.getElementById('pwOpen').click();
+					
+				} else {
+					displayFileNames(fname, 'dictionary')
+					parseJSON(darr);
+					sunTable(sunList);
+					document.getElementById('sunOpen').click();
+				}
+			};
+
+		})();
+
+		var do_file = (function() {
+			return function do_file(files) {
+				console.log('do_file', files[0]["name"]);
+				var t0 = performance.now();
+				var rABS = false;
+				var f = files[0];
+				fname = f["name"];
+
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					var data = e.target.result;
+					console.log(data);
+					//process_wb(XLSX.read(data, {type:'array'}));
+					var use_utf8 = false;
+					var input =  document. getElementById("cbutf8");
+					if (input.checked) use_utf8 = true;
+					let wb = XLSX.read(data, {type: 'array', codepage: use_utf8 ? 65001 : void 0});
+					process_wb(wb);
+				};
+				if(rABS) reader.readAsBinaryString(f);
+				else {
+				console.log('readasbinary');
+					reader.readAsArrayBuffer(f);
+				}
+				var t1 = performance.now();
+				console.log("do_file " + (t1 - t0) + " milliseconds.");
+			};
+		})();
+
+		var selectedDocument = "None Selected";
+		var selectedFont = "None Selected";
+		var selectedPrimary = "None Selected";
+
+		function displayFileNames(f, selected) {
+
+			console.log(f);
+			if (selected === 'font') 
+				selectedFont = f.substring(fname.lastIndexOf('/') + 1)
+			else if (selected === 'primary') 
+				selectedPrimary = f.substring(fname.lastIndexOf('/') + 1)
+			else if (selected === 'dictionary') 
+				selectedDocument = f.substring(fname.lastIndexOf('/') + 1)
+
+			document.getElementById("droptext").innerHTML = "Font File: <b> "+ selectedFont + "</b>"
+				+ "&nbsp;&nbsp;&nbsp;&nbsp; Document File: <b>"+selectedDocument+"</b>" 
+				+ "&nbsp;&nbsp;&nbsp;&nbsp; Primary Word File: <b>"+selectedPrimary+"</b>";
+		}
+
+		(function() {
+			var dropZone = document.getElementById('drop-zone')
+			if(!dropZone.addEventListener && !window.addEventListener) return;
+
+			function handleDrop(e) {
+				dropZoneDisplay(e, false); 
+				console.log('handledrop ', e.dataTransfer.files[0].name);
+
+				var url = e.dataTransfer.files[0].name;
+				var ext = url.slice((url.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase();
+				fname = url.substring(0, url.lastIndexOf('.')) || url
+				
+				if (ext === 'woff' || ext === 'ttf'){
+					changeFont(fname);
+				} else if (ext === 'csv'){
+					do_file(e.dataTransfer.files);
+				} else {
+					do_file(e.dataTransfer.files);
+				}
+			}
+
+			function handleDragover(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				e.dataTransfer.dropEffect = 'copy';
+			}
+
+			function dropZoneDisplay(e, show){
+				e.stopPropagation();
+				e.preventDefault();
+
+				var opacity = show ? '1' : '0';
+				var zIndex  = show ? '1' : '-1';
+
+				dropZone.style.opacity = opacity;
+				dropZone.style.zIndex = zIndex;
+			}
+
+			window.addEventListener('drop' , handleDrop)
+			window.addEventListener('dragover' , handleDragover)
+			window.addEventListener('dragenter' , function(e){
+				dropZoneDisplay(e, true);
+			})
+
+			dropZone.addEventListener('dragleave' , function(e){
+				dropZoneDisplay(e, false);
+			})
+		})();
+	
+		// from browse select file
+		(function() {
+			// load either document .csv or font file
+			console.log('function xlf file')
+			var xlf = document.getElementById('xlf');
+			if(!xlf.addEventListener) return;
+			function handleFile(e) { 
+				console.log('handleFile',e.target.files[0]);
+				url = e.target.files[0].name;
+				var ext = url.slice((url.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase();
+				fname = url.substring(0, url.lastIndexOf('.')) || url
+				//displayFileNames(fname)
+				
+				if (ext === 'woff' || ext === 'ttf'){
+					changeFont(fname);
+				} else {
+					do_file(e.target.files); 
+				}
+			}	
+			
+			xlf.addEventListener('change', handleFile, false);
+		})();
+
+
+		xlfFile = document.getElementById('xlf');
+		xlfFile.value = ""; 
+
+		//https://stackoverflow.com/questions/11355147/font-face-changing-via-javascript
+		function fface(f) {
+			ff = "@font-face { font-family: '" + f + "';\
+				src: url('" + f + ".woff') format('woff'),\
+					 url('" + f + ".ttf') format('truetype');\
+			}"
+
+			return ff;
+		}
+
+		function changeFont(f) {
+			ff = fface(f)
+			var fStyle = document.getElementById("fontStyle")
+			if (!fStyle) {
+				fStyle = document.createElement('style');
+				fStyle.id = "fontStyle"
+				fStyle.appendChild(document.createTextNode(ff)
+				);
+					
+				document.head.appendChild(fStyle);
+			} else {
+				fStyle.innerHTML = ff;
+			}
+			//selectedFont = f;
+			displayFileNames(f, 'font');
+			console.log('changefont',fStyle.innerHTML)
+			document.documentElement.style.setProperty('--sun-font', f);
+		}
+
+		function xsetSrch(e) {
+			srchType = document.querySelector('input[name = wsrch]:checked').value;
+			search_Table();
+		}
+
+
+		function xclearTable() {
+			console.log("clearing table")
+			//document.getElementById("sunoutput").innerHTML = "";
+		}
+
+		function clearSearch() {
+			console.log("clear");
+			srchType = document.querySelector('input[name = wsrch]:checked').value;
+			document.getElementById('xsearch').value = "";
+			search_Table();
+		}	
+
+		function showDebug() {
+			e =document.getElementById('showdebug').checked;
+			if (e) {
+				generateTable(jscsvToArray(csvData));
+				//table_mismatch();
+			} else {
+				document.getElementById("output").innerHTML = ""
+			}
+		}
+
+		function initDocumentFile(url) {
+			//url = "https://github.com/wfzirk/SUN-Xref/gh-pages/input/xref921_10_6_9_EN.csv"
+
+			//url = "https://raw.githubusercontent.com/wfzirk/SUN-Xref/gh-pages/input/xref921_10_6_9_EN.csv"
+			//url = "https://raw.githubusercontent.com/wfzirk/Library-Card/main/Input/librarything_HolmstadLibrary.xls"
+
+			//url = "./input/xref921_10_6_9_EN.csv";
+
+			fetch(url, { mode: 'no-cors'}).then(res => { 
+				return res.arrayBuffer();
+			}).then(res => {
+				var use_utf8 = false;
+				console.log('file:', url);
+				selectedDocument = url;
+				//displayFileNames();
+				//var ext = url.slice((url.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase();
+				//if (ext === 'csv') _CSV = true;
+				data = new Uint8Array(res);
+				console.log(data)
+				// https://docs.sheetjs.com/docs/api/parse-options/
+				if (data) process_wb(XLSX.read(data, {type: 'array', codepage: use_utf8 ? 65001 : void 0}));
+
+			});
+		}
+		function initFont() {
+			//fontURL = "https://raw.githubusercontent.com/wfzirk/SUN-Xref/gh-pages/fonts/SUN921_10_6_EN.woff";
+			//fontURL = "https://raw.githubusercontent.com/wfzirk/SUN-Xref/main/SUNBF921_10_6_EN.woff";
+			changeFont(fontURL);
+		}
+
+		url = "input/SUN_DB_Rosetta_Stone_06.25.2024.xlsx";
+		fontURL = "SUN_DB_Rosetta_Stone_06.25.2024";
+		//initFont();
+		//initDocumentFile(url);
+	
+
+	</script>
+</body>
+</html>

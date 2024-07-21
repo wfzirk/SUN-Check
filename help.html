@@ -1,0 +1,40 @@
+<style>
+body { background-color:white; }
+.highlightme { background-color:#FFFF00; }
+p { background-color:#FFFFFF; }
+</style>
+
+<h1> SUN-XREF-MF</h1>
+<h3>New Style SUN dictionary </h3>
+<p>This program allows one to view the SUN dictionary looking for mismatches with the contents of an image for a given unicode.</p>
+<h4>Assumptions:</h4>
+<ul>
+	<li>Primary file can be either <strong>.csv</strong> or <strong>.xlsx</strong>. 
+	If <strong>XLSX</strong> then the sheet name must be <strong>&quot;Sheet1&quot;</strong>.</li>
+	<li> The primary file is created by parsing the <strong>SUN???.sfd</strong> file.</li>
+	<li>The <span class="highlightme">SUN Diictionary</span> file must be an .xlsx file.  The first sheet named <strong>&#39;Table_of_Contents&#39;</strong></li>
+	<li>Format of the dictionary file is as featured in the <strong>&quot;SUN_DB_Rosetta_Stone_06.25.2024.xlsx&quot;</strong> spreadsheet.</li>
+	<li>The font files are not necessary except for viewing the image for comparison with the Contents</li>
+	<li>If the font files are used, both the <strong>WOFF</strong> and <strong>TTF</strong> font files must be present.</li>
+</ul>
+<h4>Features:</h4>
+<ul>
+	<li>Browse or Drag and Drop <span class="highlightme">dictionary file, primary word file and font file into the page.</span></li>
+	<li>Search all Columns.</li>
+	<li>Sort a column by clicking on column header.</li>
+	<li>Identified miscompares are shown in <span style="color:red">red.</span></li>
+	<li>Clicking on a <span style="color:red">red line</span> in the SUN Directory will show the differences.</li>
+</ul>
+<h4>Instructions</h4>
+<p>Both the SUN dictionary and the Primary Word list must be loaded for comparison to work.</p>
+<p>Contents (Made From) data is assumed within parenthasis separated by commas.<br>Comparisons are made of consistant &quot;Contents&quot; entries in order and &quot;Contents&quot; entries are unique for a unicode.</p>
+<p>There are four tabs to allow viewing data in different ways.
+<ul>
+	<li>The <span class="highlightme">&quot;SUN Directory&quot;</span> tab shows the original dictionary in linear form.</li>
+	<li>The <span class="highlightme">&quot;Primary Words&quot;</span> tab shows a list of the primary words combined with the &quot;Contents column from the SUN directory.</li>
+	<li>The <span class="highlightme">&quot;Error List&quot;</span> tab is a list of the miscompares &quot;Content&quot; miscompares.</li>
+	<li>The <span class="highlightme">&quot;Contains&quot;</span> tab shows all the all the uicodes for a particular content.</li>
+</ul>
+<h4>Usage</h4>
+<p>Drag and Drop files any where on page or click the browse button The program will determine the type of file based on assumptions above.<br>Selecting &quot;SUN Dictionary&quot; tab will display the SUN Dictionary - parsed into a linear array.<br>Selecting &quot;Primary Words&quot; tab will gather the contents for each unicode.</p>
+<p>In the SUN directory tab, miscompare errors will be highlighted with <span style="color:red">red</span>.  If the &quot;Show Errors&quot; box is checked only the error rows will be shown making it easier to find the errors.</p>

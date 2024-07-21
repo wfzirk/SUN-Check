@@ -1,0 +1,34 @@
+#mdlTable {
+	 border-width: 1px;
+	 border-color: darkblue;
+	 color: black;
+	 background-color: lightgray; 
+	 font-size: 16px;
+	 table-layout: fixed;
+	 margin-bottom: 5px;
+	 width: 100%; 
+
+}
+
+#mdlTable th {
+	position:sticky;
+	top:0;
+	z-index:1;
+	border-style: inset;
+	border-color: blue;
+	border-width: 2px;
+	font-size: 14px;
+	background: #d6eaf8;
+}	
+
+#mdlTable td {
+	border-width: 1px;
+	padding: 1px;
+	border-style: inset;
+	border-color: blue;
+	font-size: 14px;
+	word-wrap: break-word;
+	min-width: 25px;
+	background: #d6eaf8;
+}	
+	
