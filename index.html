@@ -45,7 +45,21 @@
 		border: 1px solid blue;
 		padding-left:15px;
 		background-color: #f2f4f4;);
-	}		
+	}	
+	
+	
+	.grid-header {
+		display: grid;
+		grid-template-columns: 100px auto 100px;
+		
+		place-items: center center;
+		grid-gap: 5px;
+		border: 1px solid green;
+
+		padding-top:10px;
+		padding-bottom:10px;
+		background-color: lightblue;);
+	}	
 	</style>
 
 </head>
@@ -58,9 +72,15 @@
 			Average duration: <code id="average-duration">—</code> (<code id="sortings">0</code> sortings).
 		</div>
 		-->
-		<center style="color:blue;"><b>XREF Search(Made From)</b></center>
-		<hr>
-		
+	<div class="grid-header" >
+        <div class="grid-child" >
+			<a href="javascript:window.location.reload(true)"><img style="padding:0px;" src="sun.png" width=40 height=40></a>
+		</div>
+		<div class="grid-child" style="font-size:30px; color:blue" >SUN Font Checker</div>
+		<div class="grid-child" style="font-size:20px; font-weight: bold; color:blue"><a  href='javascript:popHelp()'>Help</a>
+		</div>
+	</div>
+
 		<div class="grid-container" style="border: 1px solid blue; background:lightblue;">
 			<div class="grid-child">   <!-- style="border: 1px solid blue; background:lightblue;">-->
 				<div style="margin-bottom:0.5em;">
@@ -69,8 +89,6 @@
 					<label id="droptext" style="color:blue; margin-bottom:0px;" > 
 					Either browse or drop a document file(.xlsx) and font file (.woff/ttf) and primary list file (.csv) anywhere on page.
 					</label>
-				<!--					<label  for="cbutf8" style="float: right; padding-right:5px;" >UTF-8</label>
-				<input style="float: right; padding-right:5px;" type="checkbox" id="cbutf8" name="cbutf8" checked>-->
 				</div>
 				
 				<div style="float:left;">
@@ -90,10 +108,10 @@
 				</div>
 			</div>
 			<div class="grid-child">  <!-- green" style="background:lightblue;">-->
-				
+				<!--
 				<a style="float:left; padding-left:5px;" href='javascript:popHelp()'>Help</a><br>
 				<a style="float:left; padding-left:5px;" href="javascript:window.location.reload(true)">Reload</a>
-				<br>
+				<br>-->
 				<label  for="cbutf8" style="float: left; padding-left:5px;" >CSV UTF-8</label>
 					<input  type="checkbox" id="cbutf8" name="cbutf8" checked>
 				<br><br>

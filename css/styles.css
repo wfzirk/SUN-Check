@@ -37,9 +37,10 @@ div.filetable {
 
 #pwoutput, #sunoutput, #erroutput, #contoutput {
 	/*font-family: var(--sun-font);*/ 
-	height: 75%;
+	/*height: 75%;*/
 	overflow-y: scroll;
 	scroll-behavior: smooth;
+	height: 480px;
 }
 
 table.xreftable {
