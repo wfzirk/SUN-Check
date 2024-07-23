@@ -22,8 +22,8 @@
 	<style>
 	/* =========    dragable dialogbox   ========== */
 	.dialog {
-		z-index: 99999; /* Sit on top */
-		color: #fff;
+		z-index: 99999;
+		color: black;
 		background: lightgray;
 	}
 	
@@ -32,39 +32,56 @@
 		background: red;
 	}
 	
-	.dialog>button {
-		background: #ff9999;
+	.dialog button {
+		background-color: #ff9999;
 	}
+	
+	#hdialog {
+		z-index: 99999;
+		color: black;
+		background: lightyellow;
+		width; 800px;
+	}
+	
+	#htitlebar {
+		color: blue;
+		background: lightblue;
+	}
+
+	
+	.hdialog button {
+		
+		float:right;
+	}
+	
+	
+	
 	
 	/*============ grid style for table look ============ */
 	.grid-container {
 		display: grid;
-		/*grid-template-columns: 1fr 1fr;*/
 		grid-template-columns: auto 130px;
 		grid-gap: 5px;
 		border: 1px solid blue;
 		padding-left:15px;
-		background-color: #f2f4f4;);
+		background-color: #f2f4f4;
 	}	
 	
 	
 	.grid-header {
 		display: grid;
 		grid-template-columns: 100px auto 100px;
-		
 		place-items: center center;
 		grid-gap: 5px;
 		border: 1px solid green;
-
-		padding-top:10px;
-		padding-bottom:10px;
-		background-color: lightblue;);
+		padding-top:3px;
+		padding-bottom:3px;
+		background-color: lightblue;
 	}	
 	</style>
 
 </head>
 <body>
-
 	<div>
 		<!--<div class="alert alert-info" hidden>
 			Mode: <a href="?" id="span-for">FOR</a> | <a href="?foreach=true" id="span-foreach">FOREACH</a> (used in this test only)<br>
@@ -74,10 +91,10 @@
 		-->
 	<div class="grid-header" >
         <div class="grid-child" >
-			<a href="javascript:window.location.reload(true)"><img style="padding:0px;" src="sun.png" width=40 height=40></a>
+			<a href="javascript:window.location.reload(true)"><img style="padding:0px; color:yellow;" src="sun.png" width=40 height=40></a>
 		</div>
 		<div class="grid-child" style="font-size:30px; color:blue" >SUN Font Checker</div>
-		<div class="grid-child" style="font-size:20px; font-weight: bold; color:blue"><a  href='javascript:popHelp()'>Help</a>
+		<button style="height:30px; width:70px;" onclick="javascript:popHelp()" id="btnHelp">Help</button>
 		</div>
 	</div>
 
@@ -149,13 +166,23 @@
 
 <!-- ===================   dragable dialogbox   --->
 	<div id="dialog" class="dialog" style="min-width:500px; min-height:280px;">
-		<div class="titlebar">Duplicate/Compare Error</div>
-		<button name="close"><!-- enter symbol here like &times; or &#x1f6c8; or use the default X if empty --></button>
+		<div  class="titlebar">Duplicate/Compare Error</div>
+	<button name="close" style="float:right"><!-- enter symbol here like &times; or &#x1f6c8; or use the default X if empty --></button>
 		<div id = "modalcontent" class="content">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			
+		</div>
+		<div id="buttonpane" class="buttonpane">
+			<div class="buttonset">
+				<button name="ok">OK</button>
+				<button name="cancel">Cancel</button>
+			</div>
+		</div>
+	</div>
+	<!--
+	<div id="dialog" class="dialog" style="min-width:800px; min-height:580px;">
+		<div class="titlebar">Help Dialog</div>
+	<button name="close"><!-- enter symbol here like &times; or &#x1f6c8; or use the default X if empty --><!--</button>
+		<div id = "hmodalcontent" class="content">
 		</div>
 		<div class="buttonpane">
 			<div class="buttonset">
@@ -164,16 +191,24 @@
 			</div>
 		</div>
 	</div>
-
+-->
 	<script src="js/modal.js"></script>
-	<script type="text/javascript" src="js/draggable-resizable-dialog.js"></script>
+	<script src="js/draggable-resizable-dialog.js"></script>
 	<script src="js/tablesearch.js"></script>
 	<script src="js/table-mf.js"></script>
 	<script src="js/tablesort.min.js"></script>
 
 	<script>
+
+		function loadHelp() {
+		  fetch('help.html')
+			  .then(response => response.text())
+			  .then(text => document.getElementById('modalcontent').innerHTML = text);
+		}
+
+
 		function popHelp(){
-			const win = window.open("help.html",
+			const winPop = window.open("help.html",
 				"win",
 				`width=800,height=400,screenX=200,screenY=200`
 		);

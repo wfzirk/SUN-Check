@@ -2,10 +2,12 @@
 _showDialogButton = document.getElementById('show-dialog');
 _statusDialog = document.getElementById('dialog-status');
 _modelContent = document.getElementById('modalcontent');
+
 var dialog;
-function showDialog() {
+function showDialog(val) {
 	if (!dialog) {
-		var id = 'dialog';
+		if (val == 'help') var id = 'hdialog';
+		else var id = 'dialog';
 		// Instanciate the Dialog Box
 		dialog = new DialogBox(id, callbackDialog);
 	}
@@ -62,6 +64,49 @@ function dispModal(btn, errData) {
 		
 		//console.log(table.outerHTML);
 		_modelContent.innerHTML = table.outerHTML;
-		showDialog();
+		showDialog('');
 	}	
+}
+
+var hdialog;
+function helpDialog() {
+	if (!dialog) {
+		var id = 'dialog';
+		// Instanciate the Dialog Box
+		hdialog = new DialogBox(id, callbackDialog);
+		hd = document.getElementById('dialog');
+		hdtitle = document.getElementById('htitlebar');
+		hdtitle.style.width = '800px';
+		hdtitle.innerHTML = 'SUN Checking Help';
+		//hdtitle.style.color = 'blue';
+		//hd.className += ' hdialog';
+		//hd.style.color = 'blue';
+		hd.style.width = '800px';
+		//hd.style.height = '300px';
+		//hd.style.left = '10px';
+		//btn = document.getElementById('buttonpane');
+		//btn.style.width = '800px';
+	}
+	// Show Dialog Box
+	hdialog.showDialog();
+
+	// Receive result from Dialog Box
+	function callbackDialog(btnName) {
+
+	}
+}
+
+function mdlHelp() {
+	console.log(mdlHelp);
+	function loadHTML() {
+		  fetch('help.html')
+			  .then(response => response.text())
+			  .then(text => document.getElementById('modalcontent').innerHTML = text);
+		}
+	//let div = document.createElement('div');
+	//div.id = "mdlDiv";
+	loadHTML()
+	
+	//_modelContent.innerHTML = div.outerHTML;
+		helpDialog('');
 }
