@@ -13,7 +13,7 @@ function search_Table(){
 			var txt = "+";
 			
 			for(j=0 ; j < td.length ; j++) {		// start column 0
-				  let tdata = td[j] ;
+				let tdata = td[j] ;
 				  if (tdata) {
 					 txt = txt +'+'+ tdata.innerHTML.toUpperCase();
 				  }
